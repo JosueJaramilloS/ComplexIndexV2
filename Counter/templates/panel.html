@@ -50,6 +50,38 @@
         </div>
     </div>
 
+    </div>
+
+    <!-- Guía y enseñanza de funciones por rol -->
+    {% if is_admin %}
+    <div class="mb-8 bg-blue-50 border border-blue-200 rounded-2xl p-6 text-blue-900 shadow-sm">
+        <h3 class="font-extrabold text-lg flex items-center gap-2.5 mb-2">
+            <span>👑</span> Guía del Administrador (Control Total)
+        </h3>
+        <p class="text-sm text-blue-800 leading-relaxed">
+            Como administrador, tienes acceso completo a todas las funciones y proyectos del sistema: puedes <strong>crear proyectos/empresas</strong>, gestionar usuarios y roles, auditar reportes, administrar listas de expertos, utilizar el detector de ocultamiento, revisar el total de palabras y realizar análisis completos.
+        </p>
+    </div>
+    {% elif is_expert %}
+    <div class="mb-8 bg-indigo-50 border border-indigo-200 rounded-2xl p-6 text-indigo-900 shadow-sm">
+        <h3 class="font-extrabold text-lg flex items-center gap-2.5 mb-2">
+            <span>⚖️</span> Guía del Experto (Revisión y Análisis)
+        </h3>
+        <p class="text-sm text-indigo-800 leading-relaxed">
+            Como experto, tus responsabilidades principales son: revisar la aplicación de palabras técnicas, utilizar el <strong>detector de ocultamiento</strong>, gestionar y crear listas de expertos, consultar la lista de empresas y revisar los reportes de auditoría.
+        </p>
+    </div>
+    {% elif is_regular %}
+    <div class="mb-8 bg-emerald-50 border border-emerald-200 rounded-2xl p-6 text-emerald-900 shadow-sm">
+        <h3 class="font-extrabold text-lg flex items-center gap-2.5 mb-2">
+            <span>👤</span> Guía del Usuario Estándar
+        </h3>
+        <p class="text-sm text-emerald-800 leading-relaxed">
+            Como usuario estándar, tienes acceso exclusivo para <strong>ver la lista de empresas</strong>, consultar los <strong>reportes</strong> y <strong>subir nuevos reportes</strong> al sistema para su procesamiento.
+        </p>
+    </div>
+    {% endif %}
+
     <!-- Cuadrícula de Módulos (Categorías Actuales con Diseño Homogéneo) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
@@ -91,6 +123,28 @@
             </a>
         </div>
 
+        {% if not is_expert %}
+        <!-- !Subida y análisis -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200 p-6 flex flex-col justify-between group">
+            <div>
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                </div>
+                <h2 class="text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors">Upload & Analysis</h2>
+                <p class="text-gray-500 text-sm mb-4 leading-relaxed">Upload a report to the system for processing.</p>
+            </div>
+            <a href="{% url 'upload' %}" class="mt-auto inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 bg-gray-50 hover:bg-blue-600 text-gray-700 hover:text-white font-semibold rounded-xl border border-gray-200 hover:border-transparent transition-all duration-200 text-sm">
+                <span>Access</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+        {% endif %}
+
+        {% if is_admin or is_expert %}
         <!-- !Total de Palabras -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200 p-6 flex flex-col justify-between group">
             <div>
@@ -104,25 +158,6 @@
                 <div class="text-2xl font-black text-blue-600 mb-4">{{ total_palabras|default:"0" }}</div>
             </div>
             <a href="{% url 'totalcount' %}" class="mt-auto inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 bg-gray-50 hover:bg-blue-600 text-gray-700 hover:text-white font-semibold rounded-xl border border-gray-200 hover:border-transparent transition-all duration-200 text-sm">
-                <span>Access</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-            </a>
-        </div>
-
-        <!-- !Subida y análisis -->
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200 p-6 flex flex-col justify-between group">
-            <div>
-                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                </div>
-                <h2 class="text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors">Upload & Analysis</h2>
-                <p class="text-gray-500 text-sm mb-4 leading-relaxed">Upload a report to the system for processing.</p>
-            </div>
-            <a href="{% url 'upload' %}" class="mt-auto inline-flex items-center justify-center gap-1.5 w-full py-2.5 px-4 bg-gray-50 hover:bg-blue-600 text-gray-700 hover:text-white font-semibold rounded-xl border border-gray-200 hover:border-transparent transition-all duration-200 text-sm">
                 <span>Access</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
@@ -187,9 +222,10 @@
                 </svg>
             </a>
         </div>
+        {% endif %}
 
         <!-- !Usuarios -->
-        {% if user.is_staff %}
+        {% if is_admin %}
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200 p-6 flex flex-col justify-between group">
             <div>
                 <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">

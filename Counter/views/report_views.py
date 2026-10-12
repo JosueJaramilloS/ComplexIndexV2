@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import json
@@ -29,6 +29,7 @@ def report_view(request):
     )
 
 
+@login_required
 def see_report_json(request, report_id):
     report = Report.objects.get(id=report_id)
     data = {
@@ -44,11 +45,15 @@ def see_report_json(request, report_id):
     return JsonResponse(data)
 
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 def delete_report(request, report_id):
     Report.objects.filter(id=report_id).delete()
     return HttpResponse(status=204)
 
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 def update_report(request, report_id):
     data = json.loads(request.body)
     try:

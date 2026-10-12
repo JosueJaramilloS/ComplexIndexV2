@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from .general_views import expert_or_admin_required
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Sum
 from django.db.models.functions import Trim
@@ -18,6 +19,7 @@ from ..utils import quitar_tildes, recalcular_metricas_reporte
 
 
 @login_required
+@expert_or_admin_required
 def concealment_detection_view(request):
 
     reports = Report.objects.all()
@@ -277,6 +279,7 @@ def concealment_detection_view(request):
     )
 
 @login_required
+@expert_or_admin_required
 def get_report_words(request):
 
     report_id = request.GET.get("report_id")
@@ -294,6 +297,7 @@ def get_report_words(request):
     return JsonResponse(palabras, safe=False)
 
 @login_required
+@expert_or_admin_required
 def get_reports_by_year(request):
     year = request.GET.get("year")
     if not year:
@@ -328,6 +332,7 @@ def get_reports_by_year(request):
     )
 
 @login_required
+@expert_or_admin_required
 def concealment_history_view(request):
     from django.contrib.auth.models import User
 
@@ -401,6 +406,7 @@ def concealment_history_view(request):
 
 
 @login_required
+@expert_or_admin_required
 def concealment_history_detail_ajax(request, review_id):
     review = get_object_or_404(
         ConcealmentReview.objects.select_related("report", "report__company", "user"),

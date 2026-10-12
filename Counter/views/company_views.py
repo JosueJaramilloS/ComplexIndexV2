@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
@@ -57,6 +57,8 @@ def see_company_json(request, company_id):
     return JsonResponse(data)
 
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 @csrf_exempt
 def create_company(request):
     if request.method == "POST":
@@ -95,11 +97,14 @@ def create_company(request):
 
 
 @login_required
+@user_passes_test(lambda u: u.is_staff)
 def delete_company(request, company_id):
     Company.objects.filter(id=company_id).delete()
     return HttpResponse(status=204)
 
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 @csrf_exempt
 def update_company(request, company_id):
     company = Company.objects.get(id=company_id)

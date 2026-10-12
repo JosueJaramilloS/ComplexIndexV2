@@ -2,11 +2,13 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseNotAllowed
 from django.contrib.auth.decorators import login_required
+from .general_views import expert_or_admin_required
 from ..models import Expert, ExpertWord
 from django.contrib.auth.models import User
 
 
 @login_required
+@expert_or_admin_required
 def create_list(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -43,6 +45,7 @@ def create_list(request):
 
 
 @login_required
+@expert_or_admin_required
 def get_list_json(request, list_id):
     lista = get_object_or_404(ExpertWord, id=list_id)
     return JsonResponse({
@@ -53,6 +56,7 @@ def get_list_json(request, list_id):
 
 
 @login_required
+@expert_or_admin_required
 def update_list(request, list_id):
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"])
@@ -88,6 +92,7 @@ def update_list(request, list_id):
 
 
 @login_required
+@expert_or_admin_required
 def delete_list(request, list_id):
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"])
@@ -101,6 +106,7 @@ def delete_list(request, list_id):
 
 
 @login_required
+@expert_or_admin_required
 def create_expert(request):
     if request.method == "POST":
         data = json.loads(request.body)
@@ -126,6 +132,7 @@ def create_expert(request):
 
 
 @login_required
+@expert_or_admin_required
 def expert_list_view(request):
     experts = Expert.objects.prefetch_related("word_lists").select_related("user", "user__profile")
 

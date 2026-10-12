@@ -2,11 +2,13 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.urls import reverse
 from Counter.models import Company, Report, TotalCountReport, ConcealmentReview, ConcealmentParagraphReview
+from User.models import Expert
 
 
 class ConcealmentDetectionFilterTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testauditor', password='password123')
+        Expert.objects.create(user=self.user, profession='Auditor')
         self.client = Client()
         self.client.login(username='testauditor', password='password123')
 
@@ -185,6 +187,7 @@ class ConcealmentDetectionFilterTests(TestCase):
 class ComparativeAnalysisTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='analyst', password='password')
+        Expert.objects.create(user=self.user, profession='Analyst')
         self.client.login(username='analyst', password='password')
         self.company = Company.objects.create(name='ACME CORP S.A.', ruc='0990000004001')
         self.report = Report.objects.create(
@@ -269,3 +272,40 @@ class PanelViewTests(TestCase):
         self.assertContains(resp, 'Admin Panel')
         self.assertContains(resp, 'Companies')
         self.assertContains(resp, 'Reports')
+
+
+class RolePermissionTests(TestCase):
+    def setUp(self):
+        self.regular_user = User.objects.create_user(username='regular', password='password')
+        self.expert_user = User.objects.create_user(username='expert', password='password')
+        Expert.objects.create(user=self.expert_user, profession='Legal')
+        self.admin_user = User.objects.create_superuser(username='admin', password='password')
+
+    def test_regular_user_access(self):
+        self.client.login(username='regular', password='password')
+        res_comp = self.client.get(reverse('companies'))
+        self.assertEqual(res_comp.status_code, 200)
+        res_rep = self.client.get(reverse('reports'))
+        self.assertEqual(res_rep.status_code, 200)
+        res_upload = self.client.get(reverse('upload'))
+        self.assertEqual(res_upload.status_code, 200)
+
+        res_conceal = self.client.get(reverse('concealment_detection'))
+        self.assertEqual(res_conceal.status_code, 302)
+
+    def test_expert_access(self):
+        self.client.login(username='expert', password='password')
+        res_conceal = self.client.get(reverse('concealment_detection'))
+        self.assertEqual(res_conceal.status_code, 200)
+        res_experts = self.client.get(reverse('expert_lists'))
+        self.assertEqual(res_experts.status_code, 200)
+
+    def test_expert_cannot_upload(self):
+        self.client.login(username='expert', password='password')
+        res = self.client.get(reverse('upload'))
+        self.assertEqual(res.status_code, 302)
+
+    def test_admin_access(self):
+        self.client.login(username='admin', password='password')
+        res_users = self.client.get(reverse('users'))
+        self.assertEqual(res_users.status_code, 200)

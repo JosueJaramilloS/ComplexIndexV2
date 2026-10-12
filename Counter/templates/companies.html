@@ -61,6 +61,7 @@ body {
             </p>
         </div>
 
+        {% if is_admin %}
         <div class="flex items-center space-x-3 flex-shrink-0">
             <button onclick="openCreateModal()"
                     class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-sm">
@@ -70,6 +71,7 @@ body {
                 <span>Create Company</span>
             </button>
         </div>
+        {% endif %}
     </div>
 
     <!-- Search Filters: Text bar + Province dropdown -->
@@ -276,6 +278,7 @@ body {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
                         </button>
+                        {% if is_admin %}
                         <button onclick="openEditModal({{ company.id }})" title="Edit"
                                 class="p-2 rounded-lg bg-yellow-50 text-yellow-600 hover:bg-yellow-100 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -288,6 +291,7 @@ body {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
                         </button>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}

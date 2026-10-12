@@ -14,6 +14,28 @@ from ..models import TotalCountReport
 from ..models import Report
 from User.models import Expert, UserProfile
 
+
+def is_admin(user):
+    return user.is_staff or user.is_superuser
+
+
+def is_expert(user):
+    return hasattr(user, 'expert_profile') or Expert.objects.filter(user=user).exists()
+
+
+def expert_or_admin_required(view_func):
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        if is_admin(request.user) or is_expert(request.user):
+            return view_func(request, *args, **kwargs)
+        messages.error(request, "Acceso restringido. Solo los expertos y administradores pueden acceder a esta sección.")
+        return redirect('companies')
+    return _wrapped_view
+
+
+admin_required = user_passes_test(lambda u: u.is_staff)
+
 # * ---------------------------------------- VISTAS GENERALES ----------------------------------------
 def index_view(request):
     return render(request, "index.html")
@@ -37,6 +59,10 @@ def panel_view(request):
 
 @login_required
 def upload_view(request):
+    if is_expert(request.user):
+        messages.error(request, "Los expertos no tienen permitido subir reportes.")
+        return redirect('companies')
+
     individual_form = IndividualReportUploadForm()
     zip_form = ZipUploadForm()
     companies = Company.objects.all()
@@ -82,6 +108,7 @@ def upload_view(request):
 
 
 @login_required
+@expert_or_admin_required
 def comparative_analysis_view(request):
     resultado = None
 
@@ -205,9 +232,6 @@ def user_view(request):
         })
 
     return render(request, "users.html", {"users": users})
-
-
-admin_required = user_passes_test(lambda u: u.is_staff)
 
 
 def _admin_group():

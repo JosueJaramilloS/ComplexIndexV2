@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from .general_views import expert_or_admin_required
 from django.shortcuts import render, get_object_or_404
 from ..models import TotalCountReport, Report
 
 @login_required
+@expert_or_admin_required
 def total_count_report_view(request, report_id):
     results = list(
         TotalCountReport.objects.filter(report__id=report_id).order_by("-quantity")

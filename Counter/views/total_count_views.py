@@ -1,5 +1,6 @@
 from itertools import chain
 from django.contrib.auth.decorators import login_required
+from .general_views import expert_or_admin_required
 from django.db.models import Sum, Avg
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -126,6 +127,7 @@ def get_complexity_metrics(request):
     return reports_data
 
 @login_required
+@expert_or_admin_required
 def total_count_view(request):
     total_counts = get_filtered_total_counts(request)
 
@@ -166,6 +168,7 @@ def total_count_view(request):
 
 
 @login_required
+@expert_or_admin_required
 def export_total_count_excel(request):
     total_counts = get_filtered_total_counts(request)  # ya devuelve valores agrupados
     total_quantity = sum(item["quantity"] for item in total_counts)
