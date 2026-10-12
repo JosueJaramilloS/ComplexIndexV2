@@ -12,8 +12,8 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)  # loguea al usuario automáticamente
-            messages.success(request, 'Tu cuenta ha sido creada con éxito. Ahora puedes iniciar sesión.')
-            return redirect('index')  # redirige al inicio
+            messages.success(request, '¡Bienvenido a Enterprise Lex Index! Tu cuenta ha sido creada y activada con éxito.')
+            return redirect('workspaces_list')
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})

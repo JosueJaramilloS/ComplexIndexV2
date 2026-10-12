@@ -101,12 +101,26 @@
         <p class="text-gray-500 text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed">
             {% trans "Accede a las herramientas de análisis comparativo, histórico de reportes y gestión de empresas." %}
         </p>
+        {% if user.is_authenticated %}
         <a href="{% url 'panel' %}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition duration-200 text-sm">
             <span>{% trans "Ir al Panel de Administración" %}</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
             </svg>
         </a>
+        {% else %}
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href="{% url 'register' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition duration-200 text-sm">
+                <span>{% trans "Comenzar Ahora — Crear Cuenta" %}</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+            <a href="{% url 'login' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-6 py-3.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-50 transition border border-slate-200">
+                <span>{% trans "Iniciar Sesión" %}</span>
+            </a>
+        </div>
+        {% endif %}
     </div>
 </section>
 

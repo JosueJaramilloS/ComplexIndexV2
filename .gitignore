@@ -45,3 +45,8 @@ node_modules/
 *.sqlite3*
 *.backup*
 *.zip
+
+# Agentes y skills de IA
+.agents/
+AGENTS.md
+

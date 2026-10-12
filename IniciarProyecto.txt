@@ -1,10 +1,10 @@
 == COMO INICIAR EL PROYECTO (Linux / Fedora) ==
 
 1. Ir a la carpeta del proyecto
-   cd ~/Documentos/Proyectos/ComplexIndexV2
+   cd ~/Projects/ComplexIndexV2
 
 2. Activar el entorno virtual
-   source venv/bin/activate
+   source .venv/bin/activate
 
 3. Arrancar el servidor
    python manage.py runserver

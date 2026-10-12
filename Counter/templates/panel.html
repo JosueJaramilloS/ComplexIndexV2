@@ -73,6 +73,86 @@
         </div>
     </div>
 
+    {% if total_reports == 0 and total_companies == 0 %}
+    <!-- Onboarding Guiado: Primeros Pasos en el Espacio -->
+    <div class="mb-10 bg-white rounded-3xl border border-blue-200/80 shadow-sm p-6 sm:p-8 relative overflow-hidden bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/30">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200 mb-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                    <span>{% trans "Espacio recién configurado" %}</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    {% trans "Empieza por aquí: Ingesta y Configuración Inicial" %}
+                </h2>
+                <p class="text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
+                    {% trans "Tu espacio de trabajo está listo pero aún no contiene datos. Sigue estos pasos recomendados para procesar tus primeros informes periciales." %}
+                </p>
+            </div>
+            <a href="{% url 'upload' %}" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-md hover:shadow-lg transition duration-200 shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                <span>{% trans "Subir Primer Informe (PDF o ZIP)" %}</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6">
+            <!-- Paso 1 -->
+            <div class="bg-white/90 backdrop-blur-xs rounded-2xl border border-blue-100 p-5 shadow-2xs flex flex-col justify-between hover:border-blue-300 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="w-7 h-7 rounded-lg bg-blue-600 text-white font-mono font-bold text-xs flex items-center justify-center">1</span>
+                        <span class="text-[11px] font-semibold text-blue-700 uppercase tracking-wider font-mono">{% trans "Ruta Directa" %}</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1.5">{% trans "Carga de Memorias o ZIP" %}</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                        {% trans "Sube tus PDFs. El algoritmo extraerá automáticamente la razón social de la empresa, el año y las métricas lingüísticas." %}
+                    </p>
+                </div>
+                <a href="{% url 'upload' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition">
+                    <span>{% trans "Ir a Cargar Reportes" %}</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+            <!-- Paso 2 -->
+            <div class="bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 p-5 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="w-7 h-7 rounded-lg bg-slate-800 text-white font-mono font-bold text-xs flex items-center justify-center">2</span>
+                        <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider font-mono">{% trans "Opcional" %}</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1.5">{% trans "Registrar Empresa Manualmente" %}</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                        {% trans "Si prefieres pre-registrar las empresas con su RUC y provincia antes de subir documentos." %}
+                    </p>
+                </div>
+                <a href="{% url 'companies' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 transition">
+                    <span>{% trans "Registrar Empresa" %}</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+            <!-- Paso 3 -->
+            <div class="bg-white/90 backdrop-blur-xs rounded-2xl border border-slate-200 p-5 shadow-2xs flex flex-col justify-between hover:border-slate-300 transition">
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="w-7 h-7 rounded-lg bg-slate-800 text-white font-mono font-bold text-xs flex items-center justify-center">3</span>
+                        <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider font-mono">{% trans "Auditoría" %}</span>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-1.5">{% trans "Vocabulario de Peritaje" %}</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                        {% trans "Define listas de palabras de expertos para comparar términos normativos y evaluar opacidad." %}
+                    </p>
+                </div>
+                <a href="{% url 'expert_lists' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 transition">
+                    <span>{% trans "Crear Lista de Experto" %}</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Cuadrícula de Módulos (Categorías Actuales con Diseño Homogéneo) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
